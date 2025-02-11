@@ -5,6 +5,7 @@ import Login from './components/Login';
 import AdminHome from './components/AdminHome';
 import ViewAllAppointments from './components/ViewAllAppointments';
 import AppointmentDetails from './components/AppointmentDetails';
+import RegisterUser from './components/RegisterUser';
 
 function App() {
   const navigate = useNavigate();
@@ -31,6 +32,7 @@ function App() {
         <Route path="/admin-home" element={<AdminHome />} />
         <Route path="/view-all-appointments" element={<ViewAllAppointments />} />
         <Route path="/appointment-details/:id" element={<AppointmentDetails />} />
+        <Route path="/register-user" element={<RegisterUser />} />
       </Routes>
     </div>
   );

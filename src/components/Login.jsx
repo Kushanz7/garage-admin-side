@@ -7,10 +7,10 @@ function Login() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate(); // Initialize the useNavigate hook
 
-  const googleLogin = () => {
+  /*const googleLogin = () => {
     console.log("logging in with google")
     window.location.href = 'http://localhost:8080/login/google';
-  };
+  };*/
   
 
   const handleLocalLogin = async (e) => {
@@ -20,6 +20,14 @@ function Login() {
         email,
         password
       });
+
+      const user = response.data;
+
+      // Check if the user has the role of ADMIN
+      if (user.role !== 'ADMIN') {
+        alert('Access denied! Only admins can log in.');
+        return;
+      }
 
       // Store customer info after successful login
       localStorage.setItem('customerId', response.data.id);

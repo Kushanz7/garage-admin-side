@@ -6,6 +6,8 @@ import AdminHome from './components/AdminHome';
 import ViewAllAppointments from './components/ViewAllAppointments';
 import AppointmentDetails from './components/AppointmentDetails';
 import RegisterUser from './components/RegisterUser';
+import AutoPartPage from './components/AutoPartPage';
+import UpdateAutoPartPage from './components/UpdateAutoPartPage';
 
 function App() {
   const navigate = useNavigate();
@@ -33,6 +35,8 @@ function App() {
         <Route path="/view-all-appointments" element={<ViewAllAppointments />} />
         <Route path="/appointment-details/:id" element={<AppointmentDetails />} />
         <Route path="/register-user" element={<RegisterUser />} />
+        <Route path='/auto-parts' element={<AutoPartPage />} />
+        <Route path="/update-auto-part/:id" element={<UpdateAutoPartPage />} />
       </Routes>
     </div>
   );

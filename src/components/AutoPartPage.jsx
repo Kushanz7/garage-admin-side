@@ -1,8 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Grid,
+  Card,
+  CardContent,
+  CardActions,
+  IconButton,
+} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import Sidebar from "./sidebar";
 
-function AutoPartPage() {
+const AutoPartPage = () => {
   const [autoParts, setAutoParts] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
@@ -11,7 +25,7 @@ function AutoPartPage() {
     stock: "",
     brand: "",
     vehicle: "",
-    imageUrl: "" // Store Google Drive link
+    imageUrl: "",
   });
 
   const navigate = useNavigate();
@@ -35,18 +49,24 @@ function AutoPartPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitting data:", formData); // Debugging
-
     try {
-        await axios.post("http://localhost:8080/api/autoParts", formData);
-        alert("Auto part added successfully!");
-        fetchAutoParts();
+      await axios.post("http://localhost:8080/api/autoParts", formData);
+      alert("Auto part added successfully!");
+      fetchAutoParts();
+      setFormData({
+        name: "",
+        category: "",
+        price: "",
+        stock: "",
+        brand: "",
+        vehicle: "",
+        imageUrl: "",
+      });
     } catch (error) {
-        console.error("Error adding auto part:", error.response?.data || error);
-        alert("Error adding auto part!");
+      alert("Error adding auto part!");
+      console.error(error);
     }
-};
-
+  };
 
   const handleDelete = async (id) => {
     const confirmDelete = window.confirm("Are you sure you want to delete this auto part?");
@@ -67,54 +87,99 @@ function AutoPartPage() {
   };
 
   return (
-    <div className="auto-part-page">
-      <h2>Auto Parts Management</h2>
-      
-      {/* Add Auto Part Form */}
-      <div className="form-container">
-        <h3>Add Auto Part</h3>
-        <form onSubmit={handleSubmit}>
-          <input type="text" name="name" placeholder="Name" value={formData.name} onChange={handleChange} required />
-          <input type="text" name="category" placeholder="Category" value={formData.category} onChange={handleChange} required />
-          <input type="number" name="price" placeholder="Price" value={formData.price} onChange={handleChange} required />
-          <input type="number" name="stock" placeholder="Stock" value={formData.stock} onChange={handleChange} required />
-          <input type="text" name="brand" placeholder="Brand" value={formData.brand} onChange={handleChange} />
-          <input type="text" name="vehicle" placeholder="Vehicle" value={formData.vehicle} onChange={handleChange} />
-          <input type="text" name="imageUrl" placeholder="Image URL" value={formData.imageUrl} onChange={handleChange} required />
+    <Box display="flex">
+      <Sidebar />
 
-          <button type="submit">Add Auto Part</button>
-        </form>
-      </div>
+      <Box flex={1} p={3} bgcolor="#F9FAFC">
+        <Typography variant="h4" fontWeight="bold" gutterBottom>
+          Auto Parts Management
+        </Typography>
 
-      {/* View Auto Parts */}
-      <div className="parts-list">
-        <h3>Available Auto Parts</h3>
-        <ul>
+        {/* Add Auto Part Form */}
+        <Box mb={3}>
+          <Typography variant="h6" gutterBottom>
+            Add Auto Part
+          </Typography>
+          <form onSubmit={handleSubmit}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField label="Name" name="name" value={formData.name} onChange={handleChange} fullWidth required />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField label="Category" name="category" value={formData.category} onChange={handleChange} fullWidth required />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField label="Price" name="price" type="number" value={formData.price} onChange={handleChange} fullWidth required />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField label="Stock" name="stock" type="number" value={formData.stock} onChange={handleChange} fullWidth required />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField label="Brand" name="brand" value={formData.brand} onChange={handleChange} fullWidth />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField label="Vehicle" name="vehicle" value={formData.vehicle} onChange={handleChange} fullWidth />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField label="Image URL" name="imageUrl" value={formData.imageUrl} onChange={handleChange} fullWidth required />
+              </Grid>
+              <Grid item xs={12}>
+                <Button type="submit" variant="contained" color="primary" fullWidth>
+                  Add Auto Part
+                </Button>
+              </Grid>
+            </Grid>
+          </form>
+        </Box>
+
+        {/* View Auto Parts */}
+        <Typography variant="h6" gutterBottom>
+          Available Auto Parts
+        </Typography>
+        <Grid container spacing={3}>
           {autoParts.map((part) => (
-            <li key={part.id}>
-              <h4>{part.name}</h4>
-              <p>Category: {part.category}</p>
-              <p>Price: ${part.price}</p>
-              <p>Stock: {part.stock}</p>
-              <p>Brand: {part.brand || "N/A"}</p>
-              <p>Vehicle: {part.vehicle || "N/A"}</p>
-              <img
-  src={part.imageUrl}
-  alt={part.name}
-  style={{ width: "150px", height: "150px", objectFit: "cover" }}
-/>
-
-              <br />
-              <button onClick={() => handleUpdate(part.id)}>Update</button>
-              <button onClick={() => handleDelete(part.id)} style={{ marginLeft: "10px", backgroundColor: "red", color: "white" }}>
-                Delete
-              </button>
-            </li>
+            <Grid item xs={12} sm={6} md={4} key={part.id}>
+              <Card sx={{ maxWidth: 345 }}>
+                <CardContent>
+                  <Typography variant="h6">{part.name}</Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    <strong>Category:</strong> {part.category}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    <strong>Price:</strong> ${part.price}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    <strong>Stock:</strong> {part.stock}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    <strong>Brand:</strong> {part.brand || "N/A"}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    <strong>Vehicle:</strong> {part.vehicle || "N/A"}
+                  </Typography>
+                  <Box display="flex" justifyContent="center" mt={2}>
+                    <img
+                      src={part.imageUrl}
+                      alt={part.name}
+                      style={{ width: "150px", height: "150px", objectFit: "cover", borderRadius: "8px" }}
+                    />
+                  </Box>
+                </CardContent>
+                <CardActions>
+                  <IconButton color="primary" onClick={() => handleUpdate(part.id)}>
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton color="error" onClick={() => handleDelete(part.id)}>
+                    <DeleteIcon />
+                  </IconButton>
+                </CardActions>
+              </Card>
+            </Grid>
           ))}
-        </ul>
-      </div>
-    </div>
+        </Grid>
+      </Box>
+    </Box>
   );
-}
+};
 
 export default AutoPartPage;

@@ -1,12 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useParams, useNavigate } from "react-router-dom";
+import {
+  Card,
+  CardContent,
+  Typography,
+  TextField,
+  Button,
+  Grid,
+  CircularProgress,
+} from "@mui/material";
 
 function AppointmentDetails() {
   const { id } = useParams();
   const [appointment, setAppointment] = useState(null);
-  const [estimateTime, setEstimateTime] = useState('');
-  const [actualPrice, setActualPrice] = useState('');
+  const [estimateTime, setEstimateTime] = useState("");
+  const [actualPrice, setActualPrice] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,10 +28,10 @@ function AppointmentDetails() {
       const appointmentData = response.data;
 
       setAppointment(appointmentData);
-      setEstimateTime(appointmentData.estimateTime || '');
-      setActualPrice(appointmentData.actualPrice || '');
+      setEstimateTime(appointmentData.estimateTime || "");
+      setActualPrice(appointmentData.actualPrice || "");
     } catch (error) {
-      console.error('Error fetching appointment details', error);
+      console.error("Error fetching appointment details", error);
     }
   };
 
@@ -35,45 +44,82 @@ function AppointmentDetails() {
         actualPrice,
       });
       alert(`Appointment ${status} successfully!`);
-      navigate('/view-all-appointments');
+      navigate("/view-all-appointments");
     } catch (error) {
-      alert('Error updating appointment');
+      alert("Error updating appointment");
       console.error(error);
     }
   };
 
-  if (!appointment) return <p>Loading appointment details...</p>;
+  if (!appointment)
+    return (
+      <div style={{ textAlign: "center", marginTop: "20px" }}>
+        <CircularProgress />
+        <Typography variant="h6" color="textSecondary">
+          Loading appointment details...
+        </Typography>
+      </div>
+    );
 
   return (
-    <div>
-      <h2>Appointment Details - ID: {appointment.id}</h2>
-      <p><strong>Status:</strong> {appointment.appointmentStatus}</p>
-      <p><strong>Job Description:</strong> {appointment.jobDescription}</p>
-      <p><strong>Booking Date:</strong> {new Date(appointment.bookingDate).toLocaleString()}</p>
-      <p><strong>Job Status:</strong> {appointment.jobStatus}</p>
-      <p><strong>Place to Fix:</strong> {appointment.placeToFix}</p>
-      <p><strong>Service Type:</strong> {appointment.serviceType}</p>
-      <p><strong>Vehicle Type:</strong> {appointment.vehicleType}</p>
+    <Grid container justifyContent="center" style={{ marginTop: "20px" }}>
+      <Grid item xs={12} sm={10} md={8} lg={6}>
+        <Card sx={{ boxShadow: 3, borderRadius: 2, padding: 3 }}>
+          <CardContent>
+            <Typography variant="h5" gutterBottom sx={{ fontWeight: "bold", color: "#1565c0" }}>
+              Appointment Details - ID: {appointment.id}
+            </Typography>
 
-      <label><strong>Estimated Time (minutes):</strong></label>
-      <input
-        type="number"
-        value={estimateTime}
-        onChange={(e) => setEstimateTime(e.target.value)}
-      />
+            <Typography variant="body1"><strong>Status:</strong> {appointment.appointmentStatus}</Typography>
+            <Typography variant="body1"><strong>Job Description:</strong> {appointment.jobDescription}</Typography>
+            <Typography variant="body1"><strong>Booking Date:</strong> {new Date(appointment.bookingDate).toLocaleString()}</Typography>
+            <Typography variant="body1"><strong>Job Status:</strong> {appointment.jobStatus}</Typography>
+            <Typography variant="body1"><strong>Place to Fix:</strong> {appointment.placeToFix}</Typography>
+            <Typography variant="body1"><strong>Service Type:</strong> {appointment.serviceType}</Typography>
+            <Typography variant="body1" gutterBottom><strong>Vehicle Type:</strong> {appointment.vehicleType}</Typography>
 
-      <label><strong>Actual Price:</strong></label>
-      <input
-        type="number"
-        value={actualPrice}
-        onChange={(e) => setActualPrice(e.target.value)}
-      />
+            <TextField
+              label="Estimated Time (minutes)"
+              type="number"
+              fullWidth
+              margin="dense"
+              value={estimateTime}
+              onChange={(e) => setEstimateTime(e.target.value)}
+            />
 
-      <div>
-        <button onClick={() => handleUpdateAppointment('accepted')}>Accept</button>
-        <button onClick={() => handleUpdateAppointment('rejected')}>Reject</button>
-      </div>
-    </div>
+            <TextField
+              label="Actual Price"
+              type="number"
+              fullWidth
+              margin="dense"
+              value={actualPrice}
+              onChange={(e) => setActualPrice(e.target.value)}
+            />
+
+            <Grid container spacing={2} justifyContent="center" sx={{ marginTop: 2 }}>
+              <Grid item>
+                <Button
+                  variant="contained"
+                  color="success"
+                  onClick={() => handleUpdateAppointment("accepted")}
+                >
+                  Accept
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={() => handleUpdateAppointment("rejected")}
+                >
+                  Reject
+                </Button>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+      </Grid>
+    </Grid>
   );
 }
 

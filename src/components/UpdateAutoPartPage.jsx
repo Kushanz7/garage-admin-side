@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Card, CardContent, Typography, TextField, Button, Grid } from "@mui/material";
 
 function UpdateAutoPartPage() {
   const { id } = useParams();
@@ -12,7 +13,7 @@ function UpdateAutoPartPage() {
     stock: "",
     brand: "",
     vehicle: "",
-    imageUrl: "" // Store Google Drive link
+    imageUrl: "",
   });
 
   useEffect(() => {
@@ -36,12 +37,15 @@ function UpdateAutoPartPage() {
     e.preventDefault();
 
     // Convert Google Drive link to direct link before storing
-  const formattedImageUrl = formData.imageUrl.includes("drive.google.com")
-  ? formData.imageUrl.replace("file/d/", "uc?export=view&id=").replace("/view?usp=sharing", "")
-  : formData.imageUrl;
+    const formattedImageUrl = formData.imageUrl.includes("drive.google.com")
+      ? formData.imageUrl.replace("file/d/", "uc?export=view&id=").replace("/view?usp=sharing", "")
+      : formData.imageUrl;
 
     try {
-      await axios.put(`http://localhost:8080/api/autoParts/${id}`, formData);
+      await axios.put(`http://localhost:8080/api/autoParts/${id}`, {
+        ...formData,
+        imageUrl: formattedImageUrl,
+      });
       alert("Auto part updated successfully!");
       navigate("/auto-parts");
     } catch (error) {
@@ -51,20 +55,102 @@ function UpdateAutoPartPage() {
   };
 
   return (
-    <div>
-      <h2>Update Auto Part</h2>
-      <form onSubmit={handleUpdate}>
-        <input type="text" name="name" placeholder="Name" value={formData.name} onChange={handleChange} required />
-        <input type="text" name="category" placeholder="Category" value={formData.category} onChange={handleChange} required />
-        <input type="number" name="price" placeholder="Price" value={formData.price} onChange={handleChange} required />
-        <input type="number" name="stock" placeholder="Stock" value={formData.stock} onChange={handleChange} required />
-        <input type="text" name="brand" placeholder="Brand" value={formData.brand} onChange={handleChange} />
-        <input type="text" name="vehicle" placeholder="Vehicle" value={formData.vehicle} onChange={handleChange} />
-        <input type="text" name="imageUrl" placeholder="Image URL" value={formData.imageUrl} onChange={handleChange} required />
+    <Grid container justifyContent="center" style={{ marginTop: "20px" }}>
+      <Grid item xs={12} sm={10} md={8} lg={6}>
+        <Card sx={{ boxShadow: 3, borderRadius: 2, padding: 3 }}>
+          <CardContent>
+            <Typography variant="h5" gutterBottom sx={{ fontWeight: "bold", color: "#1565c0" }}>
+              Update Auto Part
+            </Typography>
 
-        <button type="submit">Update Auto Part</button>
-      </form>
-    </div>
+            <form onSubmit={handleUpdate}>
+              <TextField
+                label="Name"
+                name="name"
+                fullWidth
+                margin="dense"
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
+
+              <TextField
+                label="Category"
+                name="category"
+                fullWidth
+                margin="dense"
+                value={formData.category}
+                onChange={handleChange}
+                required
+              />
+
+              <TextField
+                label="Price"
+                name="price"
+                type="number"
+                fullWidth
+                margin="dense"
+                value={formData.price}
+                onChange={handleChange}
+                required
+              />
+
+              <TextField
+                label="Stock"
+                name="stock"
+                type="number"
+                fullWidth
+                margin="dense"
+                value={formData.stock}
+                onChange={handleChange}
+                required
+              />
+
+              <TextField
+                label="Brand"
+                name="brand"
+                fullWidth
+                margin="dense"
+                value={formData.brand}
+                onChange={handleChange}
+              />
+
+              <TextField
+                label="Vehicle"
+                name="vehicle"
+                fullWidth
+                margin="dense"
+                value={formData.vehicle}
+                onChange={handleChange}
+              />
+
+              <TextField
+                label="Image URL"
+                name="imageUrl"
+                fullWidth
+                margin="dense"
+                value={formData.imageUrl}
+                onChange={handleChange}
+                required
+              />
+
+              <Grid container spacing={2} justifyContent="center" sx={{ marginTop: 2 }}>
+                <Grid item>
+                  <Button variant="contained" color="primary" type="submit">
+                    Update Auto Part
+                  </Button>
+                </Grid>
+                <Grid item>
+                  <Button variant="outlined" color="secondary" onClick={() => navigate("/auto-parts")}>
+                    Cancel
+                  </Button>
+                </Grid>
+              </Grid>
+            </form>
+          </CardContent>
+        </Card>
+      </Grid>
+    </Grid>
   );
 }
 

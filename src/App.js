@@ -1,53 +1,27 @@
-import React, { useEffect } from 'react';
-import './App.css';
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
-import Login from './components/Login';
-import AdminHome from './components/AdminHome';
-import ViewAllAppointments from './components/ViewAllAppointments';
-import AppointmentDetails from './components/AppointmentDetails';
-import RegisterUser from './components/RegisterUser';
-import AutoPartPage from './components/AutoPartPage';
-import UpdateAutoPartPage from './components/UpdateAutoPartPage';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import MainLayout from "./components/MainLayout";
+import AdminHome from "./components/AdminHome";
+import AutoPartsPage from "./components/AutoPartPage";
+import UsersPage from "./components/RegisterUser";
+import AppointmentsPage from "./components/ViewAllAppointments";
+import AppointmentDetails from "./components/AppointmentDetails";
+import UpdateAutoPartPage from "./components/UpdateAutoPartPage";
 
-function App() {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const customerId = params.get('userId'); 
-    const customerEmail = params.get('email');
-    const customerName = params.get('name');
-
-    if (customerId && customerEmail) {
-      // Store user information in localStorage
-      localStorage.setItem('customerId', customerId);
-      localStorage.setItem('customerEmail', customerEmail);
-      localStorage.setItem('customerName', customerName);
-      navigate('/home');
-    }
-  }, [navigate]);
-
+const App = () => {
   return (
-    <div className="App">
       <Routes>
-      <Route path="/" element={<Login />} />
-        <Route path="/admin-home" element={<AdminHome />} />
-        <Route path="/view-all-appointments" element={<ViewAllAppointments />} />
-        <Route path="/appointment-details/:id" element={<AppointmentDetails />} />
-        <Route path="/register-user" element={<RegisterUser />} />
-        <Route path='/auto-parts' element={<AutoPartPage />} />
-        <Route path="/update-auto-part/:id" element={<UpdateAutoPartPage />} />
+        {/* Wrap all main routes inside MainLayout */}
+        <Route path="/" element={<MainLayout />}>
+          <Route index element={<AdminHome />} />
+          <Route path="appointments" element={<AppointmentsPage />} />
+          <Route path="users" element={<UsersPage />} />
+          <Route path="auto-parts" element={<AutoPartsPage />} />
+          <Route path="/appointment-details/:id" element={<AppointmentDetails />} />
+          <Route path="/update-auto-part/:id" element={<UpdateAutoPartPage />} />
+        </Route>
       </Routes>
-    </div>
   );
-}
+};
 
-function AppWithRouter() {
-  return (
-    <Router>
-      <App />
-    </Router>
-  );
-}
-
-export default AppWithRouter;
+export default App;

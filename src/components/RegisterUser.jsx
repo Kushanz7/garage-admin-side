@@ -42,9 +42,9 @@ const RegisterUser = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:8080/api/customer/add", userData);
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/customer/add`, userData);
       alert("User registered successfully!");
-      navigate("/admin-home");
+      navigate("/");
     } catch (error) {
       alert("Error registering user.");
       console.error(error);
@@ -62,10 +62,17 @@ const RegisterUser = () => {
           Register a New User
         </Typography>
 
-        <Card sx={{ maxWidth: 600, mx: "auto", p: 2 }}>
+        <Card sx={{
+          maxWidth: 600,
+          mx: "auto",
+          p: 3,
+          borderRadius: "12px",
+          boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+          background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)"
+        }}>
           <CardContent>
             <form onSubmit={handleSubmit}>
-              <Grid container spacing={2}>
+              <Grid container spacing={3}>
                 <Grid item xs={12} sm={6}>
                   <TextField
                     label="First Name"
@@ -74,6 +81,8 @@ const RegisterUser = () => {
                     onChange={handleChange}
                     fullWidth
                     required
+                    variant="outlined"
+                    sx={{ bgcolor: "white", borderRadius: "8px" }}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -84,6 +93,8 @@ const RegisterUser = () => {
                     onChange={handleChange}
                     fullWidth
                     required
+                    variant="outlined"
+                    sx={{ bgcolor: "white", borderRadius: "8px" }}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -95,6 +106,8 @@ const RegisterUser = () => {
                     onChange={handleChange}
                     fullWidth
                     required
+                    variant="outlined"
+                    sx={{ bgcolor: "white", borderRadius: "8px" }}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -106,6 +119,8 @@ const RegisterUser = () => {
                     onChange={handleChange}
                     fullWidth
                     required
+                    variant="outlined"
+                    sx={{ bgcolor: "white", borderRadius: "8px" }}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -117,6 +132,8 @@ const RegisterUser = () => {
                     onChange={handleChange}
                     fullWidth
                     required
+                    variant="outlined"
+                    sx={{ bgcolor: "white", borderRadius: "8px" }}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -127,6 +144,8 @@ const RegisterUser = () => {
                     onChange={handleChange}
                     fullWidth
                     required
+                    variant="outlined"
+                    sx={{ bgcolor: "white", borderRadius: "8px" }}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -139,6 +158,8 @@ const RegisterUser = () => {
                     fullWidth
                     required
                     InputLabelProps={{ shrink: true }}
+                    variant="outlined"
+                    sx={{ bgcolor: "white", borderRadius: "8px" }}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -149,6 +170,8 @@ const RegisterUser = () => {
                     onChange={handleChange}
                     fullWidth
                     required
+                    variant="outlined"
+                    sx={{ bgcolor: "white", borderRadius: "8px" }}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -159,38 +182,47 @@ const RegisterUser = () => {
                     onChange={handleChange}
                     fullWidth
                     required
+                    variant="outlined"
+                    sx={{ bgcolor: "white", borderRadius: "8px" }}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <FormControl fullWidth required>
+                  <FormControl fullWidth required variant="outlined" sx={{ bgcolor: "white", borderRadius: "8px" }}>
                     <InputLabel>Gender</InputLabel>
-                    <Select name="gender" value={userData.gender} onChange={handleChange}>
-                      <MenuItem value="">Select Gender</MenuItem>
+                    <Select name="gender" value={userData.gender} onChange={handleChange} label="Gender">
+                      <MenuItem value=""><em>Select Gender</em></MenuItem>
                       <MenuItem value="Male">Male</MenuItem>
                       <MenuItem value="Female">Female</MenuItem>
                     </Select>
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <FormControl fullWidth>
+                  <FormControl fullWidth variant="outlined" sx={{ bgcolor: "white", borderRadius: "8px" }}>
                     <InputLabel>Role</InputLabel>
-                    <Select name="role" value={userData.role} onChange={handleChange}>
+                    <Select name="role" value={userData.role} onChange={handleChange} label="Role">
                       <MenuItem value="admin">Admin</MenuItem>
                       <MenuItem value="employee">Employee</MenuItem>
                     </Select>
                   </FormControl>
                 </Grid>
                 <Grid item xs={12}>
-                  <FormControl fullWidth>
+                  <FormControl fullWidth variant="outlined" sx={{ bgcolor: "white", borderRadius: "8px" }}>
                     <InputLabel>Auth Provider</InputLabel>
-                    <Select name="authProvider" value={userData.authProvider} onChange={handleChange}>
+                    <Select name="authProvider" value={userData.authProvider} onChange={handleChange} label="Auth Provider">
                       <MenuItem value="LOCAL">Local</MenuItem>
                       <MenuItem value="GOOGLE">Google</MenuItem>
                     </Select>
                   </FormControl>
                 </Grid>
                 <Grid item xs={12}>
-                  <Button type="submit" variant="contained" color="primary" fullWidth>
+                  <Button type="submit" variant="contained" color="primary" fullWidth sx={{
+                    padding: "10px 0",
+                    borderRadius: "8px",
+                    backgroundColor: "#007BFF",
+                    '&:hover': {
+                      backgroundColor: "#0056b3"
+                    }
+                  }}>
                     Register User
                   </Button>
                 </Grid>

@@ -22,7 +22,7 @@ function UpdateAutoPartPage() {
 
   const fetchAutoPart = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/api/autoParts/${id}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/autoParts/${id}`);
       setFormData(response.data);
     } catch (error) {
       console.error("Error fetching auto part:", error);
@@ -42,7 +42,7 @@ function UpdateAutoPartPage() {
       : formData.imageUrl;
 
     try {
-      await axios.put(`http://localhost:8080/api/autoParts/${id}`, {
+      await axios.put(`${process.env.REACT_APP_API_URL}/api/autoParts/${id}`, {
         ...formData,
         imageUrl: formattedImageUrl,
       });

@@ -9,7 +9,7 @@ import {
   Button,
   Grid,
   CircularProgress,
-  Divider,
+  Divider, // Add this import
   MenuItem,
   Select,
   InputLabel,
@@ -32,7 +32,7 @@ function AppointmentDetails() {
 
   const fetchAppointmentDetails = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/api/appointments/${id}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/appointments/${id}`);
       const appointmentData = response.data;
 
       setAppointment(appointmentData);
@@ -46,7 +46,7 @@ function AppointmentDetails() {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/api/customer/employees`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/customer/employees`);
       setEmployees(response.data);
     } catch (error) {
       console.error("Error fetching employees", error);
@@ -55,7 +55,7 @@ function AppointmentDetails() {
 
   const handleUpdateAppointment = async (status) => {
     try {
-      await axios.put(`http://localhost:8080/api/appointments/${id}`, {
+      await axios.put(`${process.env.REACT_APP_API_URL}/api/appointments/${id}`, {
         ...appointment,
         appointmentStatus: status,
         estimateTime,
@@ -83,13 +83,14 @@ function AppointmentDetails() {
   const { vehicle } = appointment;
 
   return (
-    <Grid container spacing={2} justifyContent="center" style={{ marginTop: "20px" }}>
+    <Grid container spacing={3} justifyContent="center" style={{ marginTop: "20px" }}>
       <Grid item xs={12} sm={6}>
-        <Card sx={{ boxShadow: 3, borderRadius: 2, padding: 3 }}>
+        <Card sx={{ boxShadow: 3, borderRadius: "12px", padding: 3, background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)" }}>
           <CardContent>
             <Typography variant="h5" gutterBottom sx={{ fontWeight: "bold", color: "#1565c0" }}>
               Appointment Details - ID: {appointment.id}
             </Typography>
+            <Divider sx={{ mb: 2 }} />
             <Typography variant="body1"><strong>Status:</strong> {appointment.appointmentStatus}</Typography>
             <Typography variant="body1"><strong>Job Description:</strong> {appointment.jobDescription}</Typography>
             <Typography variant="body1"><strong>Booking Date:</strong> {new Date(appointment.bookingDate).toLocaleString()}</Typography>
@@ -104,6 +105,8 @@ function AppointmentDetails() {
               margin="dense"
               value={estimateTime}
               onChange={(e) => setEstimateTime(e.target.value)}
+              variant="outlined"
+              sx={{ bgcolor: "white", borderRadius: "8px" }}
             />
             <TextField
               label="Actual Price"
@@ -112,16 +115,18 @@ function AppointmentDetails() {
               margin="dense"
               value={actualPrice}
               onChange={(e) => setActualPrice(e.target.value)}
+              variant="outlined"
+              sx={{ bgcolor: "white", borderRadius: "8px" }}
             />
 
-            <FormControl fullWidth margin="dense">
+            <FormControl fullWidth margin="dense" variant="outlined" sx={{ bgcolor: "white", borderRadius: "8px" }}>
               <InputLabel>Assign Employee</InputLabel>
               <Select
                 value={employeeId}
                 onChange={(e) => setEmployeeId(e.target.value)}
-                displayEmpty
+                label="Assign Employee"
               >
-                <MenuItem value="">None</MenuItem>
+                <MenuItem value=""><em>None</em></MenuItem>
                 {employees.map((emp) => (
                   <MenuItem key={emp.id} value={emp.id}>
                     {emp.firstName} {emp.lastName} (ID: {emp.id})
@@ -132,12 +137,12 @@ function AppointmentDetails() {
 
             <Grid container spacing={2} justifyContent="center" sx={{ marginTop: 2 }}>
               <Grid item>
-                <Button variant="contained" color="success" onClick={() => handleUpdateAppointment("accepted")}>
+                <Button variant="contained" color="success" onClick={() => handleUpdateAppointment("accepted")} sx={{ borderRadius: "8px" }}>
                   Accept
                 </Button>
               </Grid>
               <Grid item>
-                <Button variant="contained" color="error" onClick={() => handleUpdateAppointment("rejected")}>
+                <Button variant="contained" color="error" onClick={() => handleUpdateAppointment("rejected")} sx={{ borderRadius: "8px" }}>
                   Reject
                 </Button>
               </Grid>
@@ -148,11 +153,12 @@ function AppointmentDetails() {
 
       {/* Vehicle Details */}
       <Grid item xs={12} sm={6}>
-        <Card sx={{ boxShadow: 3, borderRadius: 2, padding: 3 }}>
+        <Card sx={{ boxShadow: 3, borderRadius: "12px", padding: 3, background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)" }}>
           <CardContent>
             <Typography variant="h5" gutterBottom sx={{ fontWeight: "bold", color: "#1565c0" }}>
               Vehicle Details
             </Typography>
+            <Divider sx={{ mb: 2 }} />
             <Typography variant="body1"><strong>Vehicle Number:</strong> {vehicle.vehicleNumber}</Typography>
             <Typography variant="body1"><strong>Model:</strong> {vehicle.model}</Typography>
             <Typography variant="body1"><strong>Year:</strong> {vehicle.year}</Typography>

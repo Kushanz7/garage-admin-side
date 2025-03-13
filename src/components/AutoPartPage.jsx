@@ -36,7 +36,7 @@ const AutoPartPage = () => {
 
   const fetchAutoParts = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/api/autoParts");
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/autoParts`);
       setAutoParts(response.data);
     } catch (error) {
       console.error("Error fetching auto parts:", error);
@@ -50,7 +50,7 @@ const AutoPartPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:8080/api/autoParts", formData);
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/autoParts`, formData);
       alert("Auto part added successfully!");
       fetchAutoParts();
       setFormData({
@@ -72,7 +72,7 @@ const AutoPartPage = () => {
     const confirmDelete = window.confirm("Are you sure you want to delete this auto part?");
     if (confirmDelete) {
       try {
-        await axios.delete(`http://localhost:8080/api/autoParts/${id}`);
+        await axios.delete(`${process.env.REACT_APP_API_URL}/api/autoParts/${id}`);
         alert("Auto part deleted successfully!");
         fetchAutoParts();
       } catch (error) {
@@ -96,35 +96,42 @@ const AutoPartPage = () => {
         </Typography>
 
         {/* Add Auto Part Form */}
-        <Box mb={3}>
+        <Box mb={3} sx={{ backgroundColor: "#ffffff", borderRadius: "12px", p: 3, boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}>
           <Typography variant="h6" gutterBottom>
             Add Auto Part
           </Typography>
           <form onSubmit={handleSubmit}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
-                <TextField label="Name" name="name" value={formData.name} onChange={handleChange} fullWidth required />
+                <TextField label="Name" name="name" value={formData.name} onChange={handleChange} fullWidth required variant="outlined" />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField label="Category" name="category" value={formData.category} onChange={handleChange} fullWidth required />
+                <TextField label="Category" name="category" value={formData.category} onChange={handleChange} fullWidth required variant="outlined" />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField label="Price" name="price" type="number" value={formData.price} onChange={handleChange} fullWidth required />
+                <TextField label="Price" name="price" type="number" value={formData.price} onChange={handleChange} fullWidth required variant="outlined" />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField label="Stock" name="stock" type="number" value={formData.stock} onChange={handleChange} fullWidth required />
+                <TextField label="Stock" name="stock" type="number" value={formData.stock} onChange={handleChange} fullWidth required variant="outlined" />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField label="Brand" name="brand" value={formData.brand} onChange={handleChange} fullWidth />
+                <TextField label="Brand" name="brand" value={formData.brand} onChange={handleChange} fullWidth variant="outlined" />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField label="Vehicle" name="vehicle" value={formData.vehicle} onChange={handleChange} fullWidth />
+                <TextField label="Vehicle" name="vehicle" value={formData.vehicle} onChange={handleChange} fullWidth variant="outlined" />
               </Grid>
               <Grid item xs={12}>
-                <TextField label="Image URL" name="imageUrl" value={formData.imageUrl} onChange={handleChange} fullWidth required />
+                <TextField label="Image URL" name="imageUrl" value={formData.imageUrl} onChange={handleChange} fullWidth required variant="outlined" />
               </Grid>
               <Grid item xs={12}>
-                <Button type="submit" variant="contained" color="primary" fullWidth>
+                <Button type="submit" variant="contained" color="primary" fullWidth sx={{
+                  borderRadius: "8px",
+                  padding: "10px",
+                  backgroundColor: "#007BFF",
+                  '&:hover': {
+                    backgroundColor: "#0056b3"
+                  }
+                }}>
                   Add Auto Part
                 </Button>
               </Grid>
@@ -139,14 +146,14 @@ const AutoPartPage = () => {
         <Grid container spacing={3}>
           {autoParts.map((part) => (
             <Grid item xs={12} sm={6} md={4} key={part.id}>
-              <Card sx={{ maxWidth: 345 }}>
+              <Card sx={{ maxWidth: 345, boxShadow: "0 4px 12px rgba(0,0,0,0.1)", borderRadius: "12px" }}>
                 <CardContent>
                   <Typography variant="h6">{part.name}</Typography>
                   <Typography variant="body2" color="textSecondary">
                     <strong>Category:</strong> {part.category}
                   </Typography>
                   <Typography variant="body2" color="textSecondary">
-                    <strong>Price:</strong> ${part.price}
+                    <strong>Price:</strong> Rs.{part.price}
                   </Typography>
                   <Typography variant="body2" color="textSecondary">
                     <strong>Stock:</strong> {part.stock}

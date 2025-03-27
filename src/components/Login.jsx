@@ -16,7 +16,7 @@ function Login() {
   const handleLocalLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8080/login/local', {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/login/local`, {
         email,
         password
       });
@@ -33,8 +33,9 @@ function Login() {
       localStorage.setItem('customerId', response.data.id);
       localStorage.setItem('customerName', response.data.firstName);
       localStorage.setItem('customerEmail', response.data.email);
+      localStorage.setItem('userRole', user.role);
       
-      navigate('/admin-home'); // Navigate to home page
+      navigate('/'); // Navigate to home page
       alert('Login successful!');
     } catch (error) {
       alert('Login failed!');

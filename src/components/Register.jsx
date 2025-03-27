@@ -10,14 +10,14 @@ function Register() {
 
   const googleLogin = async() => {
     console.log("logging in with google")
-    window.location.href = 'http://localhost:8080/login/google';
+    window.location.href = `${process.env.REACT_APP_API_URL}/login/google`;
   };
 
   
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8080/register', {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/register`, {
         name,
         email,
         password

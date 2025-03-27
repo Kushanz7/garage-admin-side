@@ -1,49 +1,60 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import './App.css';
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
-import Login from './components/Login';
-import AdminHome from './components/AdminHome';
-import ViewAllAppointments from './components/ViewAllAppointments';
-import AppointmentDetails from './components/AppointmentDetails';
-import RegisterUser from './components/RegisterUser';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
+import Login from "./components/Login";
+import MainLayout from "./components/MainLayout";
+import AdminHome from "./components/AdminHome";
+import AutoPartsPage from "./components/AutoPartPage";
+import UsersPage from "./components/RegisterUser";
+import AppointmentsPage from "./components/ViewAllAppointments";
+import AppointmentDetails from "./components/AppointmentDetails";
+import UpdateAutoPartPage from "./components/UpdateAutoPartPage";
+import ServicesPage from "./components/ServicesPage";
 
-function App() {
+// Protected Route to check authentication
+const ProtectedRoute = ({ children }) => {
   const navigate = useNavigate();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const customerId = params.get('userId'); 
-    const customerEmail = params.get('email');
-    const customerName = params.get('name');
-
-    if (customerId && customerEmail) {
-      // Store user information in localStorage
-      localStorage.setItem('customerId', customerId);
-      localStorage.setItem('customerEmail', customerEmail);
-      localStorage.setItem('customerName', customerName);
-      navigate('/home');
+    const userRole = localStorage.getItem("userRole");
+    if (userRole === "ADMIN") {
+      setIsAuthenticated(true);
+    } else {
+      navigate("/login"); // Redirect if not an admin
     }
   }, [navigate]);
 
-  return (
-    <div className="App">
-      <Routes>
-      <Route path="/" element={<Login />} />
-        <Route path="/admin-home" element={<AdminHome />} />
-        <Route path="/view-all-appointments" element={<ViewAllAppointments />} />
-        <Route path="/appointment-details/:id" element={<AppointmentDetails />} />
-        <Route path="/register-user" element={<RegisterUser />} />
-      </Routes>
-    </div>
-  );
-}
+  return isAuthenticated ? children : null;
+};
 
-function AppWithRouter() {
+const App = () => {
   return (
-    <Router>
-      <App />
+    <Router> {/* ✅ Only one Router wrapping everything */}
+      <Routes>
+        {/* Login Page */}
+        <Route path="/login" element={<Login />} />
+
+        {/* Protect the admin routes */}
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <MainLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<AdminHome />} />
+          <Route path="appointments" element={<AppointmentsPage />} />
+          <Route path="users" element={<UsersPage />} />
+          <Route path="auto-parts" element={<AutoPartsPage />} />
+          <Route path="appointment-details/:id" element={<AppointmentDetails />} />
+          <Route path="update-auto-part/:id" element={<UpdateAutoPartPage />} />
+          <Route path="/services" element={<ServicesPage />} />
+        </Route>
+      </Routes>
     </Router>
   );
-}
+};
 
-export default AppWithRouter;
+export default App;

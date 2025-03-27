@@ -5,6 +5,7 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import BuildIcon from "@mui/icons-material/Build";
 import PeopleIcon from "@mui/icons-material/People";
 import EventNoteIcon from "@mui/icons-material/EventNote";
+import MiscellaneousServicesIcon from "@mui/icons-material/MiscellaneousServices"; // Icon for Services
 
 const Sidebar = () => {
   const location = useLocation();
@@ -13,7 +14,8 @@ const Sidebar = () => {
     { text: 'Dashboard', icon: <DashboardIcon />, to: '/' },
     { text: 'Appointments', icon: <EventNoteIcon />, to: '/appointments' },
     { text: 'Users', icon: <PeopleIcon />, to: '/users' },
-    { text: 'Auto Parts', icon: <BuildIcon />, to: '/auto-parts' }
+    { text: 'Auto Parts', icon: <BuildIcon />, to: '/auto-parts' },
+    { text: 'Services', icon: <MiscellaneousServicesIcon />, to: '/services' } // ✅ Added Services Page
   ];
 
   return (

@@ -9,6 +9,7 @@ import UsersPage from "./components/RegisterUser";
 import AppointmentsPage from "./components/ViewAllAppointments";
 import AppointmentDetails from "./components/AppointmentDetails";
 import UpdateAutoPartPage from "./components/UpdateAutoPartPage";
+import ServicesPage from "./components/ServicesPage";
 
 // Protected Route to check authentication
 const ProtectedRoute = ({ children }) => {
@@ -49,6 +50,7 @@ const App = () => {
           <Route path="auto-parts" element={<AutoPartsPage />} />
           <Route path="appointment-details/:id" element={<AppointmentDetails />} />
           <Route path="update-auto-part/:id" element={<UpdateAutoPartPage />} />
+          <Route path="/services" element={<ServicesPage />} />
         </Route>
       </Routes>
     </Router>

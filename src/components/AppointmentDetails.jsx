@@ -60,7 +60,7 @@ function AppointmentDetails() {
       setEstimateTime(appointmentData.estimateTime || "");
       setPrice(appointmentData.price || "");
       setEmployeeId(appointmentData.employee ? appointmentData.employee.id : "");
-      setBookingDate(appointmentData.bookingDate ? new Date(appointmentData.bookingDate).toLocaleString() : ""); // Set initial booking date
+      setBookingDate(appointmentData.bookingDate ? new Date(appointmentData.bookingDate).toLocaleDateString() : ""); // Set initial booking date
       setContactNo(appointmentData.customer ? appointmentData.customer.contactNo : "N/A");
     } catch (error) {
       console.error("Error fetching appointment details", error);
@@ -146,14 +146,14 @@ function AppointmentDetails() {
       return;
     }
   
-    // Format the new date
+    // Format the new date (without time for display)
     const formattedDate = bookingDate
-      ? new Date(bookingDate).toLocaleString()
+      ? new Date(bookingDate).toLocaleDateString()
       : "a new date";
   
     // Professional message asking for confirmation
     const message = encodeURIComponent(
-      `Dear Customer,\n\nWe would like to confirm your appointment (ID: ${appointment.id}).\n\nYou initially requested ${new Date(appointment.bookingDate).toLocaleString()}, but we are proposing a new date: *${formattedDate}*.\n\nPlease reply with 'YES' if this date works for you, or contact us to reschedule.\n\nThank you for choosing AutoSlot!`
+      `Dear Customer,\n\nWe would like to confirm your appointment (ID: ${appointment.id}).\n\nYou initially requested ${new Date(appointment.bookingDate).toLocaleDateString()}, but we are proposing a new date: *${formattedDate}*.\n\nPlease reply with 'YES' if this date works for you, or contact us to reschedule.\n\nThank you for choosing AutoSlot!`
     );
   
     // Open WhatsApp with the message
@@ -162,12 +162,12 @@ function AppointmentDetails() {
     // Update the booking date in the database
     try {
       const updatedBookingDate = bookingDate
-        ? new Date(bookingDate).toISOString() // Convert to ISO 8601 format
+        ? `${new Date(bookingDate).toISOString().split("T")[0]}T00:00:00` // Send default time (00:00:00)
         : null;
   
       await axios.put(`${process.env.REACT_APP_API_URL}/api/appointments/${appointment.id}`, {
         ...appointment,
-        bookingDate: updatedBookingDate, // Update the booking date
+        bookingDate: updatedBookingDate, // Update the booking date with default time
       });
   
       alert("Booking date updated successfully in the database!");
@@ -212,13 +212,15 @@ function AppointmentDetails() {
             <Typography variant="body1">Status: {appointment.appointmentStatus}</Typography>
             <Typography variant="body1">Job Status: {appointment.jobStatus}</Typography>
             <Typography variant="body1">Service: {appointment.service}</Typography>
-            <Typography variant="body1">Requested Date: {appointment.bookingDate}</Typography>
+            <Typography variant="body1">
+              Requested Date: {appointment.bookingDate ? new Date(appointment.bookingDate).toLocaleDateString() : "N/A"}
+            </Typography>
             {/* <Typography variant="body1">Booking Date: {new Date(bookingDate).toLocaleString()}</Typography>  */}
             <TextField 
               label="Booking Date" 
-              type="datetime-local" 
+              type="date" 
               fullWidth 
-              value={bookingDate ? new Date(bookingDate).toISOString().slice(0, 16) : ""}
+              value={bookingDate ? new Date(bookingDate).toISOString().split("T")[0] : ""} // Format to YYYY-MM-DD
               onChange={(e) => setBookingDate(e.target.value)} 
             />
 
@@ -324,7 +326,7 @@ function AppointmentDetails() {
                 .filter((appt) => appt.jobStatus !== "finished") // Filter out finished appointments
                 .map((appt) => (
                   <Typography key={appt.id}>
-                    {appt.id} - Booked Date: {appt.bookingDate} - Job Status: {appt.jobStatus} - Service: {appt.service}
+                    {appt.id} - Booked Date: {appt.bookingDate ? new Date(appt.bookingDate).toISOString().split("T")[0] : "N/A"} - Job Status: {appt.jobStatus} - Service: {appt.service}
                   </Typography>
                 ))}
             </CardContent>

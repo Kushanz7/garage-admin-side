@@ -130,12 +130,13 @@ function AppointmentDetails() {
     try {
       await axios.put(`${process.env.REACT_APP_API_URL}/api/appointments/${id}`, {
         ...appointment,
-        price, // Only updating actualPrice
+        price, // Update the price
+        appointmentStatus: "finished", // Change the status to "finished"
       });
-      alert("Actual price updated successfully!");
+      alert("Payment confirmed!");
       fetchAppointmentDetails(); // Refresh data after update
     } catch (error) {
-      alert("Error updating actual price");
+      alert("Error confirming payment");
       console.error(error);
     }
   };

@@ -6,6 +6,7 @@ import BuildIcon from "@mui/icons-material/Build";
 import PeopleIcon from "@mui/icons-material/People";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 import MiscellaneousServicesIcon from "@mui/icons-material/MiscellaneousServices"; // Icon for Services
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart"; // Import icon for Orders
 
 const Sidebar = () => {
   const location = useLocation();
@@ -15,7 +16,8 @@ const Sidebar = () => {
     { text: 'Appointments', icon: <EventNoteIcon />, to: '/appointments' },
     { text: 'Users', icon: <PeopleIcon />, to: '/users' },
     { text: 'Auto Parts', icon: <BuildIcon />, to: '/auto-parts' },
-    { text: 'Services', icon: <MiscellaneousServicesIcon />, to: '/services' } // ✅ Added Services Page
+    { text: 'Services', icon: <MiscellaneousServicesIcon />, to: '/services' },
+    { text: 'Orders', icon: <ShoppingCartIcon />, to: '/orders' } // ✅ Added Orders Page
   ];
 
   return (
